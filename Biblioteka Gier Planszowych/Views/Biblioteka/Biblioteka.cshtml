@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Biblioteka_Gier_Planszowych.Models.Gra_Planszowa>
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    string SesjaUzytkownik = HttpContextAccessor.HttpContext.Session.GetString("Login");
+    int? SesjaCzyAdmin = HttpContextAccessor.HttpContext.Session.GetInt32("Admin");
+}
+
+@{
+    ViewData["Title"] = "Bibliotek Gier Planszowych";
+}
+<div id="hajeden">
+<h1>Biblioteka naszych gier planszowych</h1>
+</div>
+<p>
+    <a asp-action="DodajGre">Dodaj nową planszówkę</a>
+</p>
+<table class="table drugaklasa" id="nazwaid">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Tytuł)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Wydawca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gatunek)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Opis)
+            </th>
+            <th>
+                Kto dodał
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in ViewBag.games)
+        {
+            <tr>
+
+                <td>
+                    @item.Tytuł
+                </td>
+                <td>
+                    @item.Wydawca
+                </td>
+                <td>
+                    @item.Gatunek
+                </td>
+                <td>
+                    @item.Opis
+                </td>
+                <td>
+                    @item.Login
+                </td>
+                <td>
+                    @if (SesjaUzytkownik == item.Login || SesjaCzyAdmin == 1)
+                    {
+                        @Html.ActionLink("Edytuj", "Edytuj", new {  id=@item.Id })
+                       <span>   </span>
+                        @Html.ActionLink("Usuń grę", "Delete", new { id = @item.Id })
+                    
+                    }
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
